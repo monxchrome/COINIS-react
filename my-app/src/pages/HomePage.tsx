@@ -17,7 +17,7 @@ const HomePage = () => {
                         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl">Turn voice data into transcripts with our leading Coinis AI models</h1>
                         <p className="mt-6 text-lg leading-8 text-gray-600">Built by AI experts, Coinis AI API's models include accurate speech-to-text for voice data (such as calls, virtual meetings, and podcasts), speaker detection, sentiment analysis, chapter detection, PII redaction, and more.</p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
-                        <a href="/" className="rounded-md bg-sky-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get started</a>
+                        <a href="/streaming" className="rounded-md bg-sky-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get started</a>
                         </div>
                     </div>
                 </div>
