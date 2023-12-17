@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import axios from 'axios';
 
 const Streaming = () => {
@@ -9,7 +9,7 @@ const Streaming = () => {
     const mediaRecorderRef = useRef(null);
     const chunksRef = useRef([]);
 
-    const startRecording = () => {
+    const startRecording = useCallback(() => {
         navigator.mediaDevices.getUserMedia({ audio: true })
           .then((stream) => {
             const mediaRecorder = new MediaRecorder(stream);
@@ -26,14 +26,14 @@ const Streaming = () => {
             mediaRecorder.onstop = () => {
               const audioBlob = new Blob(chunksRef.current, { type: 'audio/wav' });
     
-              // Отправка файла на сервер с использованием Axios
               const formData = new FormData();
               formData.append('file', audioBlob);
               formData.append('model', 'whisper-1');
     
-              axios.post('https://api.openai.com/v1/audio/transcriptions', formData, {
+              //@ts-ignore
+              axios.post(process.env.REACT_APP_OPENAI_API, formData, {
                 headers: {
-                    'Authorization': "Bearer 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"
+                    'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_KEY}`
                 }
               })
                 .then((response) => {
@@ -46,7 +46,6 @@ const Streaming = () => {
                   console.error('Ошибка при отправке на сервер:', error);
                 });
     
-              // Очистка для следующей записи
               chunksRef.current = [];
             };
     
@@ -56,24 +55,24 @@ const Streaming = () => {
           .catch((error) => {
             console.error('Ошибка при доступе к микрофону:', error);
           });
-      };
+      }, [currentApiResponse]);
 
-      const stopRecording = () => {
+      const stopRecording = useCallback(() => {
         //@ts-ignore
         if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
             //@ts-ignore
           mediaRecorderRef.current.stop();
           setRecording(false);
         }
-      };
+      }, []);
     
-    const toggleRecording = () => {
+    const toggleRecording = useCallback(() => {
         if (recording) {
           stopRecording();
         } else {
           startRecording();
         }
-      };
+      }, [recording, startRecording, stopRecording]);
 
     return (
         <div className="">
@@ -84,10 +83,10 @@ const Streaming = () => {
                     {recording ? "Stop Recording" : "Start Recording"}
                 </button>
             </div>
-            <div className="w-max mt-5 ml-5">
+            <div className="w-max mt-5 ml-5 max-w-full">
                 <p className="text-gray-300">{previousApiResponse}</p>
                 {previousApiResponse && <p className="animate-typing text-gray-600">. . / / . / / </p>}
-                <p key={animationKey} className="animate-typing overflow-hidden whitespace-nowrap border-r-2 border-r-gray-600 pr-5 text-1xl text-gray-600 font-bold">
+                <p key={animationKey} className="animate-typing border-r-2 border-r-gray-600 pr-5 text-1xl text-gray-600 font-bold" style={{ whiteSpace: 'pre-wrap' }}>
                     {currentApiResponse}
                 </p>
             </div>
