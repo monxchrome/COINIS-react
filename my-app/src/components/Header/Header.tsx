@@ -10,7 +10,7 @@ const Header = () => {
 
     const navigation = [
         { name: 'Streaming', href: '/streaming' },
-        { name: 'Coinis', href: '/login' },
+        // { name: 'Coinis', href: '/login' },
       ]
 
     return (

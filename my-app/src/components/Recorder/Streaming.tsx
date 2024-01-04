@@ -10,7 +10,7 @@ const Streaming = () => {
     const chunksRef = useRef([]);
 
     const startRecording = useCallback(() => {
-        navigator.mediaDevices.getUserMedia({ audio: true })
+        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
           .then((stream) => {
             const mediaRecorder = new MediaRecorder(stream);
             //@ts-ignore
@@ -29,6 +29,7 @@ const Streaming = () => {
               const formData = new FormData();
               formData.append('file', audioBlob);
               formData.append('model', 'whisper-1');
+              formData.append('language', 'sr');
     
               //@ts-ignore
               axios.post(process.env.REACT_APP_OPENAI_API, formData, {
